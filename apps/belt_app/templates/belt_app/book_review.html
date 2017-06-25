@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>{{book.title}} Reviews</title>
+        {% load staticfiles %}
+        <link rel="stylesheet" type="text/css" href="{% static 'belt_app/css/book_review.css' %}">
+    </head>
+    <header>
+        <a href='{% url "books" %}'>Home</a>
+        <a href='{% url "new_review" %}'>Add Book and Review</a>
+        <a href='{% url "user" request.session.user %}'>Profile</a>
+        <a href='{% url "logout" %}'>Log Out</a>
+    </header>
+    <body>
+    	<div id="errors">
+    		{% if messages  %}
+                {% for message in messages %}
+                    <p>{{message}}</p>
+                {% endfor %}
+            {% endif %}
+    	</div>
+	    <div id="info">
+	    	<h1>{{book.title}}</h1>
+	    	<h2>Author(s):</h2>
+	    	{% for author in authors %}
+	    		<p><a href='{% url "author" author.id %}'>{{author.name}}</a></p>
+	    	{% endfor %}	
+	    </div>
+	    <div id="Reviews">
+	    	<h1>Reviews:</h1>
+	    	{% for review in reviews %}
+	    		<p>Rating: {{review.rating}}</p>
+	    		<p><a href='{% url "user" review.reviewer.id %}'>{{review.reviewer.alias}}</a> says: {{review.content}} </p>
+	    		<p>Posted on {{review.created_at}}</p>
+	    		{% if review.reviewer.id == request.session.user %}
+	    		<a href='{% url "delete" review.id %}'>Delete this Review</a>
+	    		{% endif %}
+	    	{% endfor %}
+	    </div>
+	    <div id="favorites">
+	    	{% if book in favorites %}
+	    	<p>Already favorited. <a href='{% url "remove_favorite" book.id %}'>Remove from favorites?</a></p>
+	    	{% else %}
+	 		<p><a href='{% url "favorites" book.id %}'>Add to Favorites</a></p>
+	    	{% endif %}
+	 	</div>
+	    <div id="add_book">
+	        <h1>Add a Review:</h1>
+	        <form action='{% url "add_review" book.id %}' method='POST'>
+	        {% csrf_token %}
+	        <textarea name='review'></textarea>
+	        <p>Rating:<input type='number' min='1' max='5' name='rating'></p>
+	        <input type='submit' value='Submit Review'>
+	        </form>
+	    </div>
+    </body>
+</html>

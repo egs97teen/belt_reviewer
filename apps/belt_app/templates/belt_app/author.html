@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>{{user.alias}}'s Profile</title>
+        {% load staticfiles %}
+        <link rel="stylesheet" type="text/css" href="{% static 'belt_app/css/user.css' %}">
+    </head>
+    <header>
+        <a href='{% url "books" %}'>Home</a>
+        <a href='{% url "new_review" %}'>Add Book and Review</a>
+        <a href='{% url "user" request.session.user %}'>Profile</a>
+        <a href='{% url "logout" %}'>Log Out</a>
+    </header>
+    <body>
+        <h1>{{author.name}}</h1>
+        <div id="books_written">
+            <h2>Books Written</h2>
+            {% for book in books_written %}
+                <p><a href='{% url "book_review" book.id %}'>{{book.title}}</a></p>
+            {% endfor %}
+        </div>
+        <div id="other_authors">
+            <h2>Other Authors</h2>
+            {% for other_author in other_authors %}
+                <p><a href='{% url "author" other_author.id %}'>{{other_author.name}}</a></p>
+            {% endfor %}
+        </div>
+    </body>

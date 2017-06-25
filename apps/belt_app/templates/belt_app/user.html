@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>{{user.alias}}'s Profile</title>
+        {% load staticfiles %}
+        <link rel="stylesheet" type="text/css" href="{% static 'belt_app/css/user.css' %}">
+    </head>
+    <header>
+        <a href='{% url "books" %}'>Home</a>
+        <a href='{% url "new_review" %}'>Add Book and Review</a>
+        <a href='{% url "logout" %}'>Log Out</a>
+    </header>
+    <body>
+	    <div id="info">
+	    	<h2>User Alias: {{user.alias}}</h2>
+	    	<h3>Name: {{user.first_name}} {{user.last_name}}</h3>
+	    	<h3>Email: {{user.email}}</h3>
+	    	<h3>Total Reviews: {{reviews.count}}</h3>
+	    </div>
+	    <div id="reviews">
+	        <h2>Posted Reviews on the following books:</h2>
+	        {% for review in reviews %}
+	        	<p><a href='{% url "book_review" review.book_reviewed.id %}'>{{review.book_reviewed.title}}</a></p>
+	        {% endfor %}
+	    </div>
+	    <div id="favorites">
+	    <h1>Favorite Books</h1>
+	    {% for favorite in favorites %}
+	    	<p><a href='{% url "book_review" favorite.id %}'>{{favorite.title}}</a></p>
+	    {% endfor %}
+	    </div>
+	    <div id="unfavorites">
+	    <h1>Not Favorited</h1>
+	    {% for unfavorite in unfavorites %}
+	    	<p><a href='{% url "book_review" unfavorite.id %'>{{unfavorite.title}}</a></p>
+	    {% endfor %}
+	    </div>
+    </body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Add Book and Review</title>
+        {% load staticfiles %}
+        <link rel="stylesheet" type="text/css" href="{% static 'belt_app/css/add.css' %}">
+    </head>
+    <header>
+        <a href='{% url "books" %}'>Home</a>
+        <a href='{% url "user" request.session.user %}'>Profile</a>
+        <a href='{% url "logout" %}'>Log Out</a>
+    </header>
+    <body>
+        <div id='error'>
+            {% if messages  %}
+                {% for message in messages %}
+                    <p>{{message}}</p>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div id="add_book">
+            <h1>Add a New Book Title and a Review:</h1>
+            <form action='{% url "add" %}' method='POST'>
+                {% csrf_token %}
+                <p><label for='book_title'>Book Title:<input type='text' name='title'></label></p>
+                <p>Choose from the list:<select id='select_author' name='select_author'>
+                    <option disabled selected value="none">Select an author</option>
+                    {% for author in authors %}
+                    <option>{{author.name}}</option>
+                    {% endfor %}
+                </select></p>
+                <p><label for='new_author'>Or add a new author:<input type='text' name='new_author'></label></p>
+                <p>Choose a second author if applicable:<select id='select_second' name='select_second'>
+                    <option disabled selected value="none">Select a second author</option>
+                    {% for author in authors %}
+                    <option>{{author.name}}</option>
+                    {% endfor %}
+                </select></p>
+                <p><label for='new_second'>Or add a new second author:<input type='text' name='new_second'></label></p>
+                <p><label for='review'>Review:<textarea name ='review' class='review'></textarea>
+                <p>Rating:<input type='number' min='1' max='5' name='rating'></p>
+                <input type='submit' value='Add Book and Review'>
+            </form>
+        </div>
+    </body>
+</html>
+

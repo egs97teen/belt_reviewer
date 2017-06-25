@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Books Home</title>
+        {% load staticfiles %}
+        <link rel="stylesheet" type="text/css" href="{% static 'belt_app/css/books.css' %}">
+    </head>
+    <header>
+        <h1>Welcome {{name}}!</h1>
+        <a href='{% url "new_review" %}'>Add Book and Review</a>
+        <a href='{% url "user" request.session.user %}'>Profile</a>
+        <a href='{% url "logout" %}'>Log Out</a>
+    </header>
+    <body>
+        <div id="recent_reviews">
+            <h1>Recent Book Reviews</h1>
+            {% for review in recent %}
+            <div class="review">
+                <p><a href='{% url "book_review" review.book_reviewed.id %}'>{{review.book_reviewed.title}}</a></p>
+                <p>Rating: {{review.rating}}</p>
+                <p><a href='{% url "user" review.reviewer.id %}'>{{review.reviewer.alias}}</a> says: {{review.content}}</p>
+                {% if review.book_reviewed in favorites %}
+                <p>Already favorited. <a href='{% url "remove_favorite" review.book_reviewed.id %}'>Remove from favorites?</a></p>
+                {% else %}
+                <p><a href='{% url "favorites" review.book_reviewed.id %}'>Add to Favorites</a></p>
+                {% endif %}
+                <p>Posted on {{review.created_at}}</p>
+                {% if review.reviewer.id == request.session.user %}
+                <a href='{% url "delete" review.id %}'>Delete this Review</a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        <div id="other_reviews">
+            <h1>Other Books with Reviews</h1>
+            <div id="scroll_box">
+            {% for book in all_books %}
+                <p><a href='{% url "book_review" book.id %}'>{{book.title}}</a></p>
+            {% endfor %}
+            </div>
+        </div>
+    </body>
+</html>
+
