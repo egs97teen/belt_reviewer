@@ -27,17 +27,6 @@
 	    		<p><a href='{% url "author" author.id %}'>{{author.name}}</a></p>
 	    	{% endfor %}	
 	    </div>
-	    <div id="Reviews">
-	    	<h1>Reviews:</h1>
-	    	{% for review in reviews %}
-	    		<p>Rating: {{review.rating}}</p>
-	    		<p><a href='{% url "user" review.reviewer.id %}'>{{review.reviewer.alias}}</a> says: {{review.content}} </p>
-	    		<p>Posted on {{review.created_at}}</p>
-	    		{% if review.reviewer.id == request.session.user %}
-	    		<a href='{% url "delete" review.id %}'>Delete this Review</a>
-	    		{% endif %}
-	    	{% endfor %}
-	    </div>
 	    <div id="favorites">
 	    	{% if book in favorites %}
 	    	<p>Already favorited. <a href='{% url "remove_favorite" book.id %}'>Remove from favorites?</a></p>
@@ -45,6 +34,17 @@
 	 		<p><a href='{% url "favorites" book.id %}'>Add to Favorites</a></p>
 	    	{% endif %}
 	 	</div>
+	    <div id="Reviews">
+	    	<h1>Reviews:</h1>
+	    	{% for review in reviews %}
+	    		<p>Rating: {{review.rating}} out of 5</p>
+	    		<p><a href='{% url "user" review.reviewer.id %}'>{{review.reviewer.alias}}</a> says: {{review.content}} </p>
+	    		<p>Posted on {{review.created_at}}</p>
+	    		{% if review.reviewer.id == request.session.user %}
+	    		<a href='{% url "delete" review.id %}'>Delete this Review</a>
+	    		{% endif %}
+	    	{% endfor %}
+	    </div>
 	    <div id="add_book">
 	        <h1>Add a Review:</h1>
 	        <form action='{% url "add_review" book.id %}' method='POST'>

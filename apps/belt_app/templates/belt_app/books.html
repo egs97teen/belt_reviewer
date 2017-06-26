@@ -17,8 +17,8 @@
             <h1>Recent Book Reviews</h1>
             {% for review in recent %}
             <div class="review">
-                <p><a href='{% url "book_review" review.book_reviewed.id %}'>{{review.book_reviewed.title}}</a></p>
-                <p>Rating: {{review.rating}}</p>
+                <h2><a href='{% url "book_review" review.book_reviewed.id %}'>{{review.book_reviewed.title}}</a></h2>
+                <p>Rating: {{review.rating}} out of 5</p>
                 <p><a href='{% url "user" review.reviewer.id %}'>{{review.reviewer.alias}}</a> says: {{review.content}}</p>
                 {% if review.book_reviewed in favorites %}
                 <p>Already favorited. <a href='{% url "remove_favorite" review.book_reviewed.id %}'>Remove from favorites?</a></p>

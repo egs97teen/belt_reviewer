@@ -37,9 +37,6 @@ class UserManager(models.Manager):
 		if userData['first_name'].isalpha() == False or userData['last_name'].isalpha() == False:
 			messages.append('Name must only contain letters')
 
-		elif len(userData['last_name']) < 2:
-			messages.apppend('Last name must be at least two characters long')
-
 		if not EMAIL_REGEX.match(userData['email']):
 			messages.append('Must enter a valid email')
 
@@ -186,7 +183,7 @@ class BookManager(models.Manager):
 
 			try:
 				test = userData['select_second']
-				author2 = Author.objects.create(name=userData['select_second'])
+				author2 = Author.objects.get(name=userData['select_second'])
 				author2.books_written.add(new_book)
 			except:
 				pass
@@ -228,6 +225,7 @@ class User(models.Model):
 	email = models.CharField(max_length=255)
 	hashed_pw = models.CharField(max_length=255)
 	birthday = models.DateField()
+	friends = models.ManyToManyField('self')
 	created_at = models.DateField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
 	objects = UserManager()

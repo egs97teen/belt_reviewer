@@ -98,16 +98,36 @@ def book_review(request, book_id):
 
 def user(request, user_id):
 	user = User.objects.get(id=user_id)
+	friends = User.objects.filter(friends=user.id)
+	myself = User.objects.get(id=request.session['user'])
 	reviews = Review.objects.filter(reviewer=user.id)
-	favorites = Book.objects.filter(favorites=request.session['user'])
-	unfavorites = Book.objects.exclude(favorites=request.session['user'])
+	favorites = Book.objects.filter(favorites=user.id)
+	unfavorites = Book.objects.exclude(favorites=user.id)
 	context = {
 		'user':user,
+		'friends':friends,
+		'myself':myself,
 		'reviews':reviews,
 		'favorites':favorites,
 		'unfavorites':unfavorites
 	}
 	return render(request, 'belt_app/user.html', context)
+
+def friend(request, friend_id):
+	user = User.objects.get(id=request.session['user'])
+	friend = User.objects.get(id=friend_id)
+	user.friends.add(friend)
+	origin = request.META['HTTP_REFERER']
+	page = origin.replace('http://localhost:8000','')
+	return redirect(page)
+
+def remove_friend(request, friend_id):
+	user = User.objects.get(id=request.session['user'])
+	friend = User.objects.get(id=friend_id)
+	user.friends.remove(friend)
+	origin = request.META['HTTP_REFERER']
+	page = origin.replace('http://localhost:8000','')
+	return redirect(page)
 
 def author(request, author_id):
 	author = Author.objects.get(id=author_id)

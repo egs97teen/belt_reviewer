@@ -13,17 +13,33 @@
     </header>
     <body>
 	    <div id="info">
-	    	<h2>User Alias: {{user.alias}}</h2>
-	    	<h3>Name: {{user.first_name}} {{user.last_name}}</h3>
+	    	<h1>User Alias: {{user.alias}}</h2>
+	    	{% if user.id != request.session.user %}
+		    	<div id="add_friend">
+			    	{% if myself in friends %}
+			    	<p>Already friends!</p>
+			    	<p><a href='{% url "remove_friend" user.id %}'>Remove friend</a></p>
+			    	{% else %}
+			    	<p><a href='{% url "add_friend" user.id %}'>Add friend</a></p>
+			    	{% endif %}
+		   		</div>
+	    	{% endif %}
+	    	<h3>Name: {{user.first_name}} {{user.last_name}}</h1>
 	    	<h3>Email: {{user.email}}</h3>
 	    	<h3>Total Reviews: {{reviews.count}}</h3>
 	    </div>
 	    <div id="reviews">
-	        <h2>Posted Reviews on the following books:</h2>
+	        <h1>Posted Reviews on the following books:</h1>
 	        {% for review in reviews %}
 	        	<p><a href='{% url "book_review" review.book_reviewed.id %}'>{{review.book_reviewed.title}}</a></p>
 	        {% endfor %}
 	    </div>
+	    <div id="friends">
+		    <h1>Friends</h1>
+			    {% for friend in friends %}
+			    	<p><a href='{% url "user" friend.id %}'>{{friend.alias}}</a></p>
+			    {% endfor %}
+		    </div>
 	    <div id="favorites">
 	    <h1>Favorite Books</h1>
 	    {% for favorite in favorites %}
@@ -33,7 +49,7 @@
 	    <div id="unfavorites">
 	    <h1>Not Favorited</h1>
 	    {% for unfavorite in unfavorites %}
-	    	<p><a href='{% url "book_review" unfavorite.id %'>{{unfavorite.title}}</a></p>
+	    	<p><a href='{% url "book_review" unfavorite.id %}'>{{unfavorite.title}}</a></p>
 	    {% endfor %}
 	    </div>
     </body>
