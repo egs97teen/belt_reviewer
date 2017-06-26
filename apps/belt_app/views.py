@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render, redirect
-from .models import UserManager, User, Book, BookManager, Review, Author
+from .models import User, Book, Review, Author
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 
@@ -118,7 +118,7 @@ def friend(request, friend_id):
 	friend = User.objects.get(id=friend_id)
 	user.friends.add(friend)
 	origin = request.META['HTTP_REFERER']
-	page = origin.replace('http://localhost:8000','')
+	page = origin.replace('http://'+request.META['HTTP_HOST'],'')
 	return redirect(page)
 
 def remove_friend(request, friend_id):
@@ -126,7 +126,7 @@ def remove_friend(request, friend_id):
 	friend = User.objects.get(id=friend_id)
 	user.friends.remove(friend)
 	origin = request.META['HTTP_REFERER']
-	page = origin.replace('http://localhost:8000','')
+	page = origin.replace('http://'+request.META['HTTP_HOST'],'')
 	return redirect(page)
 
 def author(request, author_id):
@@ -157,7 +157,7 @@ def favorites(request, book_id):
 	user = User.objects.get(id=request.session['user'])
 	book.favorites.add(user)
 	origin = request.META['HTTP_REFERER']
-	page = origin.replace('http://localhost:8000','')
+	page = origin.replace('http://'+request.META['HTTP_HOST'],'')
 	return redirect(page)
 
 def remove_favorite(request, book_id):
@@ -165,14 +165,14 @@ def remove_favorite(request, book_id):
 	user = User.objects.get(id=request.session['user'])
 	book.favorites.remove(user)
 	origin = request.META['HTTP_REFERER']
-	page = origin.replace('http://localhost:8000','')
+	page = origin.replace('http://'+request.META['HTTP_HOST'],'')
 	return redirect(page)
 
 def delete(request, review_id):
 	review = Review.objects.get(id=review_id)
 	review.delete()
 	origin = request.META['HTTP_REFERER']
-	page = origin.replace('http://localhost:8000','')
+	page = origin.replace('http://'+request.META['HTTP_HOST'],'')
 	return redirect(page)
 
 def logout(request):
